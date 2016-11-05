@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+		// (function() {
+		// 	var numClicks = 0;
+		// 	document.addEventListener('click', function(){
+		// 		alert(++numClicks);
+		// 	}, false);
+		// })();
+		 //变量的作用域依赖于变量所在的闭包。和第一种方法比，我们可以将作用域限制在代码块。
+			document.addEventListener('click', (function(){
+				var numClicks = 0;
+				return function(){
+					alert(++numClicks);
+				}
+				
+			})(), false);
+
+		//向即使函数传递参数
+		(function(what){alert(what);})('hi');
+		
+	</script>
+</body>
+</html>

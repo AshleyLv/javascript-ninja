@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		div{
+			width: 40px;
+			height: 20px;
+			background-color: pink;
+			text-align: center;
+			margin-bottom: 3px;
+		}
+	</style>
+</head>
+<body>
+	<div>0</div>
+	<div>1</div>
+	<div>2</div>
+	<div>3</div>
+	<div>4</div>
+	<script type="text/javascript">
+		var divs = document.getElementsByTagName('div');
+		var i = 0;
+		for(;i<divs.length;i++){
+			(function(i){
+				divs[i].addEventListener('click', function(){
+					alert('divs#' + i + 'was clicked');
+				},false);
+			})(i);
+		}
+		//闭包记住的是变量的引用，而不是闭包创建时刻该变量的值
+	</script>
+</body>
+</html>

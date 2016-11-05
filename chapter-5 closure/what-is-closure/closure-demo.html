@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+		var outerValue = 'ninja';
+		var later;
+
+		function outerFunction() {
+			var innerValue = 'samurai';
+			function innerFunction(paramValue){
+				console.log("Inner can see the " + outerValue);
+				console.log("Inner can see the " + innerValue);
+				console.log("Inner can see the " + paramValue);
+				console.log("Inner can see the " + tooLate);
+			}
+
+			later = innerFunction;
+
+
+		}
+		console.log("Outer can't see the ronin " + tooLate);
+		var tooLate = 'ronin';
+		outerFunction();
+		later('wakizashi');
+		/*
+		关于闭包的三个概念：
+		1. 内部函数的参数是包含在闭包中的。
+		2. 作用域之外的所有变量，即使是函数声明之后的那些声明，也都包含在闭包中。
+		3. 相同的作用域内，尚未声明的变量不能进行提前引用。
+		 */
+	</script>
+</body>
+</html>

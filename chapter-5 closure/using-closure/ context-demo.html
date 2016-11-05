@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<button id="test">Click me!</button>
+	<script type="text/javascript">
+		function bind(context,name){
+			return function(){
+				return context[name].apply(context,arguments);
+			}
+		}
+		var button = {
+			clicked: false,
+			click: function(){
+				this.clicked = true;
+				if(button.clicked){
+					console.log("The button has been clicked");
+
+				}
+				console.log(this);
+				
+			}
+		};
+		var elem = document.getElementById("test");
+		elem.addEventListener("click", bind(button,"click"),false);
+	</script>
+</body>
+</html>

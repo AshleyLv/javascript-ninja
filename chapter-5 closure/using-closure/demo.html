@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		#box,#box2{
+			width: 200px;
+			height: 200px;
+			background-color: wheat;
+			position: absolute;
+		}
+	</style>
+</head>
+<body>
+	<div id="box">BOX</div>
+	<div id="box2">BOX2</div>
+	<script type="text/javascript">
+		function Ninja(){
+			var feints = 0;
+			this.getFeints = function(){
+				return feints;
+			};
+			this.feint = function(){
+				feints++;
+			};
+		}
+		var ninja = new Ninja();
+		ninja.feint();
+		console.log(ninja.getFeints());
+		console.log(ninja.feints);
+
+		/**************************************/
+
+		function animateIt(elementId){
+			var elem = document.getElementById(elementId);
+			var tick = 0;
+			var timer = setInterval(function(){
+				if(tick < 100){
+					elem.style.left = elem.style.top = tick + 'px';
+					tick++;
+				} else {
+					clearInterval(timer);
+					if(tick==100){
+						console.log("Tick accessed via a closure.");
+					}
+					if(elem){
+						console.log("Element also accessed via a closure");
+					}
+					if(timer){
+						console.log("Timer reference also obtained via a closure");
+					}
+				}
+			}, 10);
+		}
+		animateIt('box');
+		animateIt('box2');
+	</script>
+	
+</body>
+</html>
