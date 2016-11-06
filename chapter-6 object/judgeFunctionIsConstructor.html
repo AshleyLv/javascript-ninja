@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+	<script type="text/javascript">
+		function Test() {
+			return this instanceof arguments.callee;
+		}
+		if(!Test()){
+			console.log("we didn't instantiate, so it returns false.");
+		}
+
+		if(new Test()){
+			console.log("We did instantiate, returning true");
+		}
+		/*
+			通过anguments.callee可以得到当前执行函数的引用
+			普通函数的上下文是全局作用域
+			利用instanceof操作符测试已构建对象是否构建于指定的构造器
+		 */
+		/************************how to use it**********************************/
+		function User(first,last){
+			if(!(this instanceof arguments.callee)){
+				return new User(first,last);
+			}
+			this.name = first + " " + last;
+		}
+
+		var name = "Rita";
+		var user = User("Ashley","Lv");
+		console.log(name);
+		console.log(user.name);
+	</script>
+</body>
+</html>
