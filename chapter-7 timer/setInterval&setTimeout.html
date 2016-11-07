@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		setTimeout(function repeatMe(){
+			//do something
+			setTimeout(repeatMe,10);
+		},10);
+
+		setInterval(function(){
+			//do something
+		},10);
+		/*
+		在setTimeout()代码中，要在前一个callback回调执行结束并延迟10ms（可能更多，但不会更少）之后，才能再次执行setTimeout().而setInterval()则是每隔10ms就尝试执行callback，而不关注上一个callback是何时执行的。
+		1. javascript引擎是单线程执行，异步事件必须要排队等待才能执行。
+		2. 如果无法立即执行定时器，该定时器会被延迟到下一个可用的执行时间点上。（可能更长，但不会比指定的延迟事件更少）
+		3. 如果一直被延迟，到最后，interval间隔定时器可能会无延迟执行，并且同一个interval处理程序的多个实例不能同时进入排队。
+		4. setTimeout()和setInterval()在触发周期的定义上是完全不同的。
+		 */
+	</script>
+	
+</body>
+</html>
