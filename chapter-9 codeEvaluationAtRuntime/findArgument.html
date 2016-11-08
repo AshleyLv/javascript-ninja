@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		function argumentNames(fn){
+			var found = /^[\s\(]*function[^(]*\(\s*([^)]*?)\s*\)/.exec(fn.toString());
+			return found && found[1] ? found[1].split(/,\s*/) : [];
+		}
+		console.log(argumentNames(function(){}).length);
+		console.log(argumentNames(function(x){}));
+		console.log(argumentNames(function(a,b,c,d,e){}));
+		/*
+		将函数进行反编译，读取该函数的参数，然后将这些参数名称保存在一个数组中。
+		 */
+	</script>
+</body>
+</html>
