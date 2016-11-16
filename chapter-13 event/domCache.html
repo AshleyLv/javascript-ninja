@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<div title="aaa">aaae</div>
+	<div title="bbb">bbbe</div>
+	<div title="ccc">ccce</div>
+	<script type="text/javascript">
+		(function(){
+			var cache={},
+				guidCounter = 1,
+				expando = 'data' + (new Date).getTime();
+			this.getData = function(elem){
+				var guid = elem[expando];
+				if(!guid){
+					guid = elem[expando] = guidCounter++;
+					cache[guid] = {};
+				}
+				return cache[guid];
+			};
+			this.removeData = function(elem){
+				var guid = elem[expando];
+				if(!guid) return;
+				delete cache[guid];
+				try{
+					delete elem[expando];
+				} catch(e){
+					if(elem.removeAttribute){
+						elem.removeAttribute(expando);
+					}
+				}
+			};
+		})();
+		(function(){
+			var nextGuid = 1;
+			this.addEvent = function(elem, type, fn){
+				var data = getData(elem);
+				if(!data.handlers){
+					data.handlers = {};
+				}
+				if(!data.handlers[type]){
+					data.handlers[type] = [];
+				}
+				if(!fn.guid){
+					fn.guid = nextGuid++;
+				}
+				data.handlers[type].push(fn);
+				if(!data.dispatcher){
+					data.disabled = false;
+					data.dispatcher = function(event){
+						if(data.disabled)
+							return;
+						event = fixEvent(event);
+						var handlers = data.handlers[event.type];
+						if(handlers){
+							for(var n=0;n<handlers.length;n++){
+								handlers[n].call(elem, event);
+							}
+						}
+					};
+				}
+				if(data.handlers[type].length == 1){
+					if(document.addEventListener){
+						elem.addEventListener(type,data.dispatcher,false);
+					} else if(document.attachEvent){
+						elem.attachEvent('on'+type,data.dispatcher);
+					}
+				}
+			};
+		})();
+		function fixEvent(event){
+			function returnTrue(){
+				return true;
+			}
+			function returnFalse(){
+				return false;
+			}
+			if(!event || !event.stopPropagation){
+				var old = event || window.event;
+				event = {};
+				for(var prop in old){
+					event[prop] = old[prop];
+				}
+				if(!event.target){
+					event.target = event.srcElement || document;
+				}
+
+				event.relatedTarget = event.fromElement === event.target?event.toElement:event.fromElement;
+				event.preventDefault = function(){
+					event.returnValue = false;
+					event.isDefaultPrevented = returnTrue;
+				};
+				event.isDefaultPrevented = returnFalse;
+
+				event.stopPropagation = function(){
+					event.cancelBubble = true;
+					event.isPropagationStoped =returnTrue;
+				};
+				event.isPropagationStoped = returnFalse;
+
+				event.stopImmediatePropagationStopped = returnFalse;
+
+				if(event.clientX != null){
+					var doc = document.documentElement,
+					body = document.body;
+					event.pageX = event.clientX + (doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc && doc.clientLeft || body && body.clientLeft || 0);
+					event.pageY = event.clientY + (doc && doc.scrollTop || body && body.scrollTop || 0) - (doc && doc.clientTop || body && body.clientTop || 0);
+				}
+				event.which = event.charCode || event.keyCode;
+
+				if(event.button != null){
+					event.button = (event.button & 1 ? 0 : (event.button & 4 ? 1 : (event.button & 2 ? 2 : 0)));
+				}
+			}
+			return event;
+		}
+		var elems = document.getElementsByTagName('div');
+		// for(var n=0;n<elems.length;n++){
+		// 	getData(elems[n]).ninja = elems[n].title;
+		// }
+		// for(var n=0;n<elems.length;n++){
+		// 	if(getData(elems[n]).ninja === elems[n].title){
+		// 		console.log('stored data is ' + getData(elems[n]).ninja);
+		// 	}
+
+		// }
+		// for(var n=0;n<elems.length;n++){
+		// 	removeData(elems[n]);
+		// 	if(elems[n].ninja === undefined){
+		// 		console.log('stored data has been destroyed');
+		// 	}
+		// }
+	</script>
+</body>
+</html>
