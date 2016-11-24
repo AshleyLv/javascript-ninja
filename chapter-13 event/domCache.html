@@ -5,9 +5,9 @@
 	<title>Document</title>
 </head>
 <body>
-	<div title="aaa">aaae</div>
-	<div title="bbb">bbbe</div>
-	<div title="ccc">ccce</div>
+	<div title="click once">click once</div>
+	<div title="mouse over">mouse over</div>
+	<div title="many times">many times</div>
 	<script type="text/javascript">
 		(function(){
 			var cache={},
@@ -117,22 +117,71 @@
 			}
 			return event;
 		}
-		var elems = document.getElementsByTagName('div');
-		// for(var n=0;n<elems.length;n++){
-		// 	getData(elems[n]).ninja = elems[n].title;
-		// }
-		// for(var n=0;n<elems.length;n++){
-		// 	if(getData(elems[n]).ninja === elems[n].title){
-		// 		console.log('stored data is ' + getData(elems[n]).ninja);
-		// 	}
-
-		// }
-		// for(var n=0;n<elems.length;n++){
-		// 	removeData(elems[n]);
-		// 	if(elems[n].ninja === undefined){
-		// 		console.log('stored data has been destroyed');
-		// 	}
-		// }
+		function tidyUp(elem, type){
+			function isEmpty(object){
+				for(var prop in object){
+					return false;
+				}
+				return true;
+			}
+			var data = getData(elem);
+			if(data.handlers[type].length === 0){
+				delete data.handlers[type];
+				if(document.removeEventListener){
+					elem.removeEventListener(type, data.dispatcher, false);
+				} else if(document.detachEvent){
+					elem.detachEvent("on" + type, data.dispatcher);
+				}
+			}
+			if(isEmpty(data.handlers)){
+				delete data.handlers;
+				delete data.dispatcher;
+			}
+			if(isEmpty(data)){
+				removeData(elem);
+			}
+		}
+		this.removeEvent = function(elem, type, fn){
+			var data = getData(elem);
+			if(!data.handlers) return;
+			var removeType = function(t){
+				data.handlers[t] = [];
+				tidyUp(elem,t);
+			};
+			if(!type){
+				for(var t in data.handlers)
+					removeType(t);
+				return;
+			}
+			var handlers = data.handlers[type];
+			if(!handlers)
+				return;
+			if(!fn){
+				removeType(type);
+				return;
+			}
+			if(fn.guid){
+				for(var n=0;n<handlers.length;n++){
+					if(handlers[n].guid === fn.guid){
+						handlers.splice(n--,1);
+					}
+				}
+			}
+			tidyUp(elem,type);
+		}
+		
+		addEvent(window, "load", function(){
+			var subjects = document.getElementsByTagName("div");
+			for(var i=0;i<subjects.length;i++)(function(elem){
+				addEvent(elem,"mouseover",function handlers(e){
+					this.style.backgroundColor = 'red';
+				});
+				addEvent(elem, "click", function handlers(e){
+					this.style.backgroundColor = "green";
+					removeEvent(elem,"click",handler);
+				});
+			})(subjects[i]);
+		});
 	</script>
 </body>
 </html>
