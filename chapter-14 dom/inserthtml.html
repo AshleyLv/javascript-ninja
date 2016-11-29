@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		function getNodes(htmlString, doc) {
+			var map = {
+				"<td":[3, "<table><body><tr>","</tr></body></table>"]
+			};
+			var tagName = htmlString.match(/<\w+/),
+			mapEntry = tagName ? map[tagName[0]] : null;
+			if(!mapEntry)
+				mapEntry = [0," ", " "];
+			var div=(doc || document).createElement("div");
+			div.innerHTML = mapEntry[1] + htmlString + mapEntry[2];
+			while(mapEntry[0]--)
+				div = div.lastChild;
+			return div.childNodes;
+		}
+		console.log(getNodes("<td>test</td><td>test2</td>"));
+		function clone(){
+			var ret = this.map(function(){
+				if(!jQuery.support.noCloneEvent && !jQuery.isXMLDoc(this)){
+					var clone = this.cloneNode(true),
+						container = document.createElement('div');
+					container.appendChild(clone);
+					return jQuery.clean([container.innerHTML])[0];
+				} else {
+					return this.cloneNode(true);
+				}
+			});
+			var clone = ret.find('*').andSelf().each(function(){
+				if(this[expando]!==undefined)
+					this[expando] = null;
+			});
+			return ret;
+		}
+	</script>
+</body>
+</html>
