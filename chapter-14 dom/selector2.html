@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+<div id-"test">
+	<b>hello</b>,I'm Ashley
+</div>
+<div id="test2">
+	
+</div>
+	<script type="text/javascript">
+		(function(){
+			var run = 0;
+			this.unique = function(array){
+				var ret = [];
+				run++;
+				for(var i=0,length=array.length;i<length;i++){
+					var elem = array[i];
+					if(elem.uniqueID !== run){
+						elem.uniqueID = run;
+						ret.push(array[i]);
+					}
+				}
+				return ret;
+			}
+		})();
+		window.onload = function(){
+			var divs = unique(document.getElementsByTagName("div"));
+			var body = unique([document.body,document.body]);
+		}
+	</script>
+</body>
+</html>

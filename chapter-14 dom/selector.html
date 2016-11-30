@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		var selector = "div.class > span:not(:first-child) a[href]";
+		var chunker = /((?:\([^\])+\)|\[[^\]]+\]|[^,\(\[]+)+)(\s*,\s*)?/g;
+		var parts = [];
+		chunker.lastIndex = 0;
+		while((m = chunker.exec(selector)) !== null){
+			parts.push(m[1]);
+
+			if(m[2]){
+				extra = RegExp.rightContext;
+				break;
+			}
+		}
+		console.log(parts.length);
+		
+	</script>
+</body>
+</html>
